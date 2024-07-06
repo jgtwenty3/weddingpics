@@ -10,7 +10,7 @@ const LeftSidebar = () => {
       <div className="flex flex-col gap-11">
         
         <Link to="/">
-          <h1 className="font-cursive">Justin and Lindsey 2024!</h1>
+          <h1 className="font-cursive px-4">Justin and Lindsey 2024!</h1>
         </Link>
 
         <ul className="flex flex-col gap-6">
