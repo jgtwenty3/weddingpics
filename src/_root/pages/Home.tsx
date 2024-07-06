@@ -9,7 +9,7 @@ const home = () => {
   return (
     <div className = "flex flex-1">
       <div className = "home-container">
-        <div className = "font-gangsta">Not Like Us</div>
+        {/* <div className = "font-gangsta">Not Like Us</div> */}
         <div className = "home-posts">
           
           {isPostLoading && !posts ?(
