@@ -22,8 +22,7 @@ export async function createPost(post: INewPost) {
       appwriteConfig.postCollectionId,
       ID.unique(),
       {
-        
-       
+        caption: post.caption,
         imageUrl: fileUrl,
         imageId: uploadedFile.$id,
        
@@ -139,7 +138,7 @@ export async function updatePost(post: IUpdatePost) {
       appwriteConfig.postCollectionId,
       post.postId,
       {
-        
+        caption: post.caption,
         imageUrl: image.imageUrl,
         imageId: image.imageId,
         

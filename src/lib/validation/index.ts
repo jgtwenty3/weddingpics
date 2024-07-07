@@ -20,8 +20,9 @@ import * as z from "zod";
   //   bio: z.string(),
   // });
 
+
   export const PostValidation = z.object({
-    caption: z.string().max(2200, { message: "Maximum 2,200 characters" }).optional(),
+    caption: z.string().min(5, { message: "Minimum 5 characters." }).max(2200, { message: "Maximum 2,200 characters" }).optional(),
     file: z.custom<File[]>(),
   });
 

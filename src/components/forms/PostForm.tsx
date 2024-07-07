@@ -4,7 +4,7 @@ import * as z from "zod";
 
 import { Button } from "../ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "../../components/ui/form";
-
+import { Textarea } from "../ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { PostValidation } from "../../lib/validation";
 import { Models } from "appwrite";
@@ -24,7 +24,7 @@ const PostForm = ({post, action}: PostFormProps) => {
 
 
 
- 
+  
   const {toast} = useToast();
   const navigate = useNavigate();
 
@@ -33,42 +33,55 @@ const PostForm = ({post, action}: PostFormProps) => {
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
     defaultValues: {
-      
+      caption: post ? post.caption : "",
       file: [],
-     
+      
     },
   });
      
-      async function onSubmit(values: z.infer<typeof PostValidation>) {
-        if(post && action === 'Update'){
-          const updatedPost = await updatePost({
-            ...values,
-            postId:post.$id,
-            imageId:post?.imageId,
-            imageUrl:post?.imageUrl,
-          })
-          if(!updatedPost){
-            toast({title:'Please Try Again'})
-          }
-          return navigate(`/posts/${post.$id}`)
-        }
-        const newPost = await createPost({
-          ...values,
-          
-        })
-
-        if (!newPost){
-          toast({
-            title: 'Please try again'
-          })
-        }
-        navigate('/');
+  async function onSubmit(values: z.infer<typeof PostValidation>) {
+    if (post && action === 'Update') {
+      const updatedPost = await updatePost({
+        ...values,
+        postId: post.$id,
+        imageId: post?.imageId,
+        imageUrl: post?.imageUrl,
+        caption: post?.caption || "",
+      });
+      if (!updatedPost) {
+        toast({ title: 'Please Try Again' });
       }
+      return navigate(`/posts/${post.$id}`);
+    }
+    const newPost = await createPost({
+      ...values,
+      caption: values.caption || "",
+    });
+  
+    if (!newPost) {
+      toast({
+        title: 'Please try again',
+      });
+    }
+    navigate('/');
+  }
   return (
     <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)} 
-    className="flex flex-col gap-9 w-full max-w-5xl font-gangsta">
-      
+    className="flex flex-col gap-9 w-full max-w-5xl">
+      <FormField
+        control={form.control}
+        name="caption"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className = "shad-form_label">Posted By</FormLabel>
+            <FormControl>
+              <Textarea placeholder = "Your Name"className = "shad-textarea custom-scrollbar"{...field} />
+            </FormControl>
+            <FormMessage className = "shad-form_message"/>
+          </FormItem>
+        )}
+      />
       <FormField
         control={form.control}
         name="file"
@@ -92,6 +105,8 @@ const PostForm = ({post, action}: PostFormProps) => {
         <Button 
             type="button" 
             className = "shad-button_dark_4"
+            onClick={() => navigate('/')}
+            
         >
             Cancel
         </Button>
